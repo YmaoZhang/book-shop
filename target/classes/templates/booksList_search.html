@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>搜索结果列表</title>
+    <link rel="stylesheet" type="text/css"  href="dist/css/bootstrap.min.css" th:href="@{/dist/css/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" href="css/index.css" th:href="@{/css/index.css}" />
+    <link rel="stylesheet" type="text/css" href="css/animate.css" th:href="@{/css/animate.css}" />
+</head>
+<body>
+<!--导航部分  begin-->
+<div th:replace="common/header :: header"></div>
+<!--导航部分 end-->
+
+<!--最顶端轮播图片 begin-->
+<div th:replace="common/carousel :: carousel"></div>
+<!--最顶端轮播图片 end-->
+
+<div class="container">
+    <ol class="breadcrumb">
+        <li><a href="#">搜索结果</a></li>
+    </ol>
+</div>
+
+<!--展示数据开始-->
+<div id="searchBookList"></div>
+<!--展示数据结束-->
+
+<!--地址-->
+<!--首页底部信息 begin-->
+<div th:replace="common/footer :: footer"></div>
+
+<!--登录注册模态框-->
+<div th:replace="common/bookModal :: bookModal"></div>
+
+<!--end-->
+<script src="dist/js/jquery.min.js" th:src="@{/dist/js/jquery.min.js}"></script>
+<script src="js/carousel.js" th:src="@{/js/carousel.js}" type="text/javascript" charset="utf-8"></script>
+<script src="dist/js/bootstrap.min.js" th:src="@{/dist/js/bootstrap.min.js}"></script>
+<script src="js/wow.js" th:src="@{/js/wow.js}"></script>
+<script th:src="@{/js/login_reg.js}"></script>
+<script th:inline="javascript">
+    //获取应用路径
+    var contextPath = [[${#request.getContextPath()}]];
+    var name = [[${name}]];
+</script>
+<script type="text/javascript">
+    if(!(/msie [6|7|8|9]/i.test(navigator.userAgent))) {
+        new WOW().init();
+    };
+
+    $(function () {
+        //alert(name+"fds");
+        $("#searchBookList").load(contextPath + "/book/searchBookListData",queryData(1,'',name))
+    })
+
+    function queryData(page, pageSize, name) {
+        var query = {};
+        query.name= name;
+        query.page = page;
+        query.pageSize =pageSize == '' ? 4 : pageSize;
+        return query;
+    }
+
+    function loadData(page,pageSize,name) {
+        $("#searchBookList").load(contextPath + "/book/searchBookListData",queryData(page,pageSize,name))
+    }
+
+    //跳转到指定页
+    function goPage(pageSize,name) {
+        var page = $("#inputPage").val();
+        $("#searchBookList").load(contextPath + "/book/searchBookListData",queryData(page,pageSize,name))
+    }
+
+    //修改指定每页显示的记录数
+    function loadDataBySize(obj) {
+        $("#searchBookList").load(contextPath + "/book/searchBookListData",queryData(1,obj.value,name))
+    }
+</script>
+</body>
+</html>
